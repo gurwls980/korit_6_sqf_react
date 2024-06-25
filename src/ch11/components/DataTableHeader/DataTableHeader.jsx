@@ -1,8 +1,8 @@
 import Swal from "sweetalert2";
 import "./style.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
+function DataTableHeader({ mode, setMode, products, setProducts, setDeleting, editProductId }) {
 
     const emptyProduct = {
         id: "",
@@ -20,6 +20,11 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
     }
 
     const [ inputData, setInputData ] = useState({ ...emptyProduct });
+
+    useEffect(() => {
+        const [ product ] = products.filter(product => product.id === editProductId);
+        setInputData(!product ? { ...emptyProduct } : { ...product });
+    }, [editProductId]);
 
     const handleInputChange = (e) => {
         setInputData(inputData => ({
@@ -71,13 +76,37 @@ function DataTableHeader({ mode, setMode, setProducts, setDeleting }) {
             resetMode();
         }
         if(mode === 2) {
-            alert("상품수정")
+            Swal.fire({
+                title: "상품 정보 수정",
+                showCancelButton: true,
+                confirmButtonText: "확인",
+                cancelButtonText: "취소",
+            }).then(result => {
+                if(result.isConfirmed){
+                    setProducts(products => [
+                        ...products.map(product => {
+                            if(product.id === editProductId) {
+                                const { id, ...rest } = inputData;
+                                return {
+                                    ...product,
+                                    ...rest
+                                }
+                            }
+                            return product;
+                        })
+                    ]);
+                    resetMode();
+                }
+                return 10;
+            }).then(num => {
+                console.log(num);
+            });
         }
         if(mode === 3) {
             Swal.fire({
                 title: "상품 정보 삭제",
                 text: "정말로 삭제 하시겠습니까?",
-                showConfirmButton: true,
+                showCancelButton: true,
                 confirmButtonText: "삭제",
                 confirmButtonColor: "red",
                 cancelButtonText: "취소"
