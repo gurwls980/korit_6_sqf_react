@@ -61,4 +61,4 @@
 - Component 이름은 대문자로 시작
 - 하나의 Component폴더에는 하나의 Component.jsx파일, style.js로 구성
 - constants 폴더에 들어가는 상수들은 대문자와 스네이크 표기법으로 작성
-- 이벤트 함수명은 handle로 시작해서 이벤트명으로 끝낸다. 
+- 이벤트 함수명은 handle로 시작해서 이벤트명으로 끝낸다.
